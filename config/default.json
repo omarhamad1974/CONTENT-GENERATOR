@@ -1,0 +1,14 @@
+{
+  "appName": "Content Studio",
+  "geminiModel": "gemini-2.5-flash",
+  "maxItems": 20,
+  "maxWordsPerItem": 2000,
+  "defaultLanguage": "English",
+  "defaultContentType": "articles",
+  "types": {
+    "articles": {"label": "Articles / News", "file": "1-articles-template.md"},
+    "slides": {"label": "Homepage slider", "file": "2-slides-template.md"},
+    "pages": {"label": "Service pages", "file": "3-service-pages-template.md"},
+    "services": {"label": "Homepage services", "file": "4-services-section-template.md"}
+  }
+}

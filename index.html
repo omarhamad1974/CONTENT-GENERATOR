@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#14283b"><title>Content Studio · Gemini</title>
+  <link rel="stylesheet" href="assets/style.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/docx@9.5.1/dist/index.umd.cjs"></script>
+  <script type="module" src="js/app.js"></script>
+</head>
+<body>
+<header class="topbar"><div class="brand"><span class="brand-mark">✦</span><div><strong>Content Studio</strong><small>Gemini · GitHub Pages</small></div></div><div class="top-actions"><button id="uiLang" class="ghost">العربية</button><span id="authState" class="pill">Offline</span><button id="settingsBtn" class="ghost">⚙ Settings</button></div></header>
+<main class="layout">
+ <aside class="sidebar">
+  <div class="eyebrow" data-i18n="workspace">WORKSPACE</div>
+  <button class="nav active" data-panel="create" data-i18n="create">✦ Create content</button>
+  <button class="nav" data-panel="library" data-i18n="library">▤ Project library</button>
+  <button class="nav" data-panel="export" data-i18n="exports">⇩ Export center</button>
+  <div class="side-note"><strong>Import-ready content</strong><p>Uses the exact KHIP Markdown and CSV field conventions. Word uses Heading 1 for each item.</p></div>
+ </aside>
+ <div class="content">
+  <section id="panel-create" class="panel active">
+   <div class="page-head"><div><div class="eyebrow">AI CONTENT WORKFLOW</div><h1 data-i18n="headline">Create publish-ready content</h1><p class="muted" data-i18n="subhead">Describe your project, approve an outline, generate and export.</p></div><span class="step-pill">01 / 03 · Brief</span></div>
+   <div class="card form-card"><div class="section-head"><h2>Content brief</h2><span class="muted">Project setup</span></div>
+    <div class="form-grid">
+     <label class="wide">Project name<input id="projectName" placeholder="e.g. KHIP IP Awareness · November" value="New content project"></label>
+     <label>Content type<select id="contentType"><option value="articles">Articles / News</option><option value="slides">Homepage slider</option><option value="pages">Service pages</option><option value="services">Homepage services</option></select></label>
+     <label>Language<select id="language"><option>English</option><option>Arabic</option><option>Bilingual</option></select></label>
+     <label>Number of items<input id="count" type="number" min="1" max="20" value="5"></label>
+     <label>Approx. words per item<input id="words" type="number" min="30" max="2000" value="800"></label>
+     <label>Writing tone<select id="tone"><option>Professional</option><option>Informative</option><option>Marketing</option><option>Friendly</option><option>Technical</option></select></label>
+     <label>Audience<input id="audience" value="Business owners and professionals"></label>
+     <label class="wide">Topic, goals and instructions<textarea id="brief" rows="5" placeholder="Explain what the content should cover, desired sections, keywords, and any important constraints...">Explain intellectual property rights to businesses in Egypt, covering practical topics and common questions. Avoid unsupported legal claims.</textarea></label>
+     <label class="wide">Keywords or required details (optional)<textarea id="keywords" rows="2" placeholder="Keywords, services, brand voice, preferred call to action..."></textarea></label>
+    </div>
+    <div class="form-actions"><button id="saveProject" class="secondary">Save project</button><button id="outlineBtn" class="primary">✦ Generate outline</button></div>
+   </div>
+   <div id="outlineCard" class="card hidden"><div class="section-head"><div><div class="eyebrow">STEP 2</div><h2>Review the outline</h2></div><span class="muted">Edit titles before generation</span></div><div id="outlineList"></div><div class="form-actions"><button id="addOutline" class="secondary">+ Add topic</button><button id="generateBtn" class="primary">Generate full content</button></div></div>
+   <div id="resultsCard" class="card hidden"><div class="section-head"><div><div class="eyebrow">STEP 3</div><h2>Generated content</h2></div><div class="actions"><button id="saveResults" class="secondary">Save</button><button id="goExport" class="primary">Export →</button></div></div><div id="resultsList"></div></div>
+  </section>
+  <section id="panel-library" class="panel"><div class="page-head"><div><div class="eyebrow">LOCAL STORAGE</div><h1>Project library</h1><p class="muted">Projects stay in this browser. Export JSON backups to move between devices.</p></div></div><div class="card"><div class="form-actions" style="justify-content:flex-start"><button id="importJson" class="secondary">Import project JSON</button><input id="importJsonFile" type="file" accept=".json,application/json" hidden><button id="exportProjectJson" class="secondary">Download current project JSON</button></div><div id="projectList"></div></div></section>
+  <section id="panel-export" class="panel"><div class="page-head"><div><div class="eyebrow">EXPORT CENTER</div><h1>Download your content</h1><p class="muted">Choose the format your publishing workflow requires.</p></div></div><div class="card"><div class="export-grid"><label>Format<select id="exportFormat"><option value="md">Markdown (.md)</option><option value="csv">CSV (.csv) — slider only</option><option value="docx">Word (.docx)</option><option value="json">JSON (.json)</option><option value="zip">Complete ZIP package</option></select></label><label>Word document arrangement<select id="wordMode"><option value="combined">One combined Word document</option><option value="separate">Separate Word document per item</option></select></label><label class="wide">Brand / organization name<input id="brandName" placeholder="Optional name for Word cover and header" value=""></label><label class="checkline wide"><input type="checkbox" id="coverPage"> Include a cover page in standard Word export</label></div><hr><h3>Optional branded Word template</h3><p class="muted">Upload a DOCX with placeholders such as <code>{{TITLE}}</code>, <code>{{SUBTITLE}}</code> and <code>{{BODY}}</code>. Branded mode exports one document per item and preserves the template's headers, logos and styles.</p><input type="file" id="wordTemplate" accept=".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document"><p class="hint" id="templateStatus">No template selected. Standard Word export is available.</p><div class="form-actions"><button id="downloadBtn" class="primary">⇩ Download files</button></div></div></section>
+ </div>
+</main>
+<div id="status" role="status" aria-live="polite" class="toast hidden"></div>
+<dialog id="editDialog"><form method="dialog" class="dialog-shell"><div class="section-head"><h2>Edit generated item</h2><button value="cancel" class="ghost" aria-label="Close">✕</button></div><label>Title<input id="editTitle"></label><label>Subtitle<input id="editSubtitle"></label><label>Category / tag / service<input id="editCategory"></label><label>Image filename<input id="editImage"></label><label>Excerpt / brief<textarea id="editExcerpt" rows="2"></textarea></label><label>Content (Markdown)<textarea id="editBody" rows="13"></textarea></label><div class="form-actions"><button value="cancel" class="secondary">Cancel</button><button id="applyEdit" value="default" class="primary">Save changes</button></div></form></dialog>
+<dialog id="settingsDialog"><form method="dialog" class="dialog-shell"><div class="section-head"><h2>Connection settings</h2><button value="cancel" class="ghost">✕</button></div><p class="muted">Your Gemini key belongs in Supabase Secrets, never here or in GitHub.</p><label>Supabase project URL<input id="supabaseUrl" placeholder="https://your-project.supabase.co" autocomplete="off"></label><label>Supabase public anon / publishable key<input id="supabaseAnon" autocomplete="off"></label><label>Supabase account email<input id="email" type="email" autocomplete="username"></label><label>Account password<input id="password" type="password" autocomplete="current-password" placeholder="Not stored"></label><div class="form-actions"><button id="signOut" value="none" class="secondary">Sign out</button><button id="signIn" value="none" class="primary">Save & sign in</button></div><p class="hint">Enable email/password login in Supabase and allowlist your email in the Edge Function environment.</p></form></dialog>
+</body></html>

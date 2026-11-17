@@ -1,0 +1,7 @@
+import test from 'node:test';import assert from 'node:assert/strict';
+import {toMarkdown,toCsv,itemMarkdown,safeName} from '../js/exporters.js';
+test('articles follow KHIP metadata convention',()=>{const out=toMarkdown('articles',[{title:'Patent basics',subtitle:'A guide',date:'2026-11-17',category:'Patents',image:'patent.jpg',excerpt:'Short intro',body:'Introduction\n\n## First card\n\nDetails'}]);assert.match(out,/^# Patent basics\nSubtitle: A guide\nDate: 2026-11-17\nCategory: Patents\nImage: patent.jpg\nExcerpt: Short intro\n\nIntroduction/m);assert.match(out,/## First card/)});
+test('slider CSV quotes commas and double quotes',()=>{const out=toCsv('slides',[{title:'A, B',subtitle:'He said "hello"',tag:'Patents',image:'x.jpg'}]);assert.match(out,/"A, B","He said ""hello""",Patents,x.jpg/);assert.throws(()=>toCsv('articles',[]))});
+test('service page preserves Service and Language',()=>{const out=itemMarkdown('pages',{title:'براءات الاختراع',service:'Patents',language:'Arabic',body:'مقدمة\n\n## البطاقة'});assert.match(out,/Service: Patents\nLanguage: Arabic/)});
+test('homepage service preserves popup and page content marker',()=>{const out=itemMarkdown('services',{title:'Patents',service:'Patents',language:'English',brief:'Short',icon:'ph-lightbulb',pageFile:'patents.html',hidden:'no',popup:'Popup',body:'Intro\n\n## Card'});assert.match(out,/Hidden: no\n\nPopup\n\n## Page content\n\nIntro/)});
+test('filename handles Arabic and unsafe characters',()=>{assert.equal(safeName('براءات الاختراع: A/B?'),'براءات-الاختراع-A-B')});
