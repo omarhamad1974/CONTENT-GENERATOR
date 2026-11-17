@@ -1,0 +1,2 @@
+# CONTENT-GENERATOR
+Generates content
